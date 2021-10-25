@@ -6,3 +6,10 @@ export const add_contact = value => {
     payload: value
   }
 }
+
+export const get_contact = value => {
+  return {
+    type: contactConstant.GET_CONTACT,
+    payload: value
+  }
+}

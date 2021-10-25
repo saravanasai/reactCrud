@@ -1,60 +1,42 @@
-import {  useState } from "react"
-import { useDispatch } from "react-redux"
-import { useHistory } from "react-router"
-import { toast } from "react-toastify"
-import { add_contact } from "../redux/Contact/contactAction"
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
-const AddContact = () => {
-  
+const EditContact = () => {
+    const {id}=useParams();
 
-  const navigation=useHistory()
-
-  const dispatch = useDispatch()
-  const [ContactForm, setContactForm] = useState({
-    name: "",
-    email: "",
-    phonenumber: ""
-  })
-
- 
-
-  const handleSubmit = e => {
-    e.preventDefault()
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(ContactForm)
-    }
-    fetch("http://127.0.0.1:8000/api/addcontact", requestOptions)
-      .then(res => {
-        if (res.ok) {
-          res.json()
-        }
-      })
-      .then(data => {
-        dispatch(add_contact(ContactForm))
-        toast.success("CONACT ADDED SUCCESS FULLY")
-        e.target.reset()
-        navigation.push('/contact')
-      })
-  }
-
-
+    const contact_List=useSelector(state=>state.contact.contacts)
     
-  return (
-    <div className="container-fluid">
-      <h1 className="text-center text-dark py-3 display-2">Add Contact</h1>
-     
+   
+    const editInfo=contact_List.filter(list=> {
+        return list.id===Number(id)
+    });
+    
+    const [ContactForm, setContactForm] = useState({
+        name: editInfo[0].name,
+        email: editInfo[0].email,
+        phonenumber: editInfo[0].phonenumber
+      })
+    const handleUpdate=(e)=>{
+        e.preventDefault()
+        console.log(ContactForm);
+    }
+
+    return ( 
+        <div className="container-fluid">
+      <h4 className="text-center text-dark py-3 display-2">EDIT CONTACT INFO</h4>
+        
       <div className="row">
         <div className="col-md-12">
           <div className="row">
             <div className="col-md-6 p-5 mx-auto shadow">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleUpdate}>
                 <div className="form-group mt-3">
                   <input
                     className="form-control"
                     type="text"
                     placeholder="Full name"
+                    value={ContactForm.name}
                     onChange={e =>
                       setContactForm({ ...ContactForm, name: e.target.value })}
                   />
@@ -64,6 +46,7 @@ const AddContact = () => {
                     className="form-control"
                     type="email"
                     placeholder="Email"
+                    value={ContactForm.email}
                     onChange={e =>
                       setContactForm({ ...ContactForm, email: e.target.value })}
                   />
@@ -73,6 +56,7 @@ const AddContact = () => {
                     className="form-control"
                     type="number"
                     placeholder="Phone"
+                    value={ContactForm.phonenumber}
                     onChange={e =>
                       setContactForm({
                         ...ContactForm,
@@ -82,9 +66,9 @@ const AddContact = () => {
                 </div>
                 <div className="form-group mt-3">
                   <input
-                    className="btn btn-block btn-success"
+                    className="btn btn-block btn-warning"
                     type="submit"
-                    value="Add contact"
+                    value="UPDATE CONTACT"
                   />
                 </div>
               </form>
@@ -93,7 +77,7 @@ const AddContact = () => {
         </div>
       </div>
     </div>
-  )
+     );
 }
-
-export default AddContact
+ 
+export default EditContact;

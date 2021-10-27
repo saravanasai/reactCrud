@@ -1,16 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { get_contact } from "../redux/Contact/contactAction";
+import { fetch_contact } from "../redux/Contact/contactAction";
 
 const Contacts = () => {
 
   const dispatch = useDispatch();
   const contactList = useSelector((state) => state.contact.contacts);
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/allproduct")
-      .then((res) => res.json())
-      .then((data) => dispatch(get_contact(data)));
+  useEffect(() => { 
+    dispatch(fetch_contact())
   }, [dispatch]);
 
   return (

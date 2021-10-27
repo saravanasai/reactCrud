@@ -1,4 +1,5 @@
 import {  useState } from "react"
+import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { useHistory } from "react-router"
 import { toast } from "react-toastify"
@@ -8,35 +9,33 @@ const AddContact = () => {
   
 
   const navigation=useHistory()
-
   const dispatch = useDispatch()
+  const add_status=useSelector(state=>state.contact.contacts.fetchStatus)
   const [ContactForm, setContactForm] = useState({
     name: "",
     email: "",
     phonenumber: ""
   })
 
- 
+  
 
   const handleSubmit = e => {
     e.preventDefault()
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(ContactForm)
+
+    dispatch(add_contact(ContactForm))
+     console.log(add_status);
+    if(add_status)
+    {
+      toast.error("SOMETHING WENT WRONG")
+      e.target.reset()
+      
     }
-    fetch("http://127.0.0.1:8000/api/addcontact", requestOptions)
-      .then(res => {
-        if (res.ok) {
-          res.json()
-        }
-      })
-      .then(data => {
-        dispatch(add_contact(ContactForm))
-        toast.success("CONACT ADDED SUCCESS FULLY")
+    else
+    {
+      toast.success("CONACT ADDED SUCCESS FULLY")
         e.target.reset()
         navigation.push('/contact')
-      })
+    }
   }
 
 

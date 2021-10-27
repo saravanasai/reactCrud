@@ -1,7 +1,8 @@
 import { contactConstant } from "./contactConstant"
 
 const initialState = {
-  contacts: []
+  contacts: [],
+  fetchStatus:false
 }
 
 const ContactReducer = (state = initialState, action) => {
@@ -15,7 +16,12 @@ const ContactReducer = (state = initialState, action) => {
       case contactConstant.GET_CONTACT:
       return {
         ...state,
-        contacts: action.payload
+        contacts: action.payload,fetchStatus:true
+      }
+      case contactConstant.GET_CONTACT_FAILD:
+      return {
+        ...state,
+        fetchStatus: true
       }
 
     default:
@@ -24,3 +30,5 @@ const ContactReducer = (state = initialState, action) => {
 }
 
 export default ContactReducer
+
+

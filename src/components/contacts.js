@@ -9,7 +9,7 @@ const Contacts = () => {
   const contactList = useSelector((state) => state.contact.contacts);
   useEffect(() => { 
     dispatch(fetch_contact())
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="container mt-5">

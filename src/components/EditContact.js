@@ -1,31 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { fetch_single_contact, remove_selected_contact } from "../redux/Contact/contactAction";
 
 const EditContact = () => {
-    const {id}=useParams();
-
-    const contact_List=useSelector(state=>state.contact.contacts)
-    
+  const { id } = useParams();
+  const dispatch=useDispatch();
    
-    const editInfo=contact_List.filter(list=> {
-        return list.id===Number(id)
-    });
-    
-    const [ContactForm, setContactForm] = useState({
-        name: editInfo[0].name,
-        email: editInfo[0].email,
-        phonenumber: editInfo[0].phonenumber
-      })
-    const handleUpdate=(e)=>{
-        e.preventDefault()
-        console.log(ContactForm);
-    }
+  const singleContactInfo=useSelector(state=>state.contact.singleContact);
+  const Loading=useSelector(state=>state.contact.loading);
+  useEffect(()=>{
 
-    return ( 
-        <div className="container-fluid">
-      <h4 className="text-center text-dark py-3 display-2">EDIT CONTACT INFO</h4>
-        
+      dispatch(fetch_single_contact(id))
+
+    return function (){dispatch(remove_selected_contact())}
+
+  },[id]);
+  console.log(singleContactInfo);
+  const [ContactForm, setContactForm] = useState({
+    name: singleContactInfo.name,
+    email:  singleContactInfo.email,
+    phonenumber:  singleContactInfo.phonenumber
+  })
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+  };
+   
+  return (
+    <div className="container-fluid">
+      <h4 className="text-center text-dark py-3 display-2">
+        EDIT CONTACT INFO
+      </h4>
+     {!Loading && (<><h3>Loading.....</h3></>)}
+     {singleContactInfo && (<>
       <div className="row">
         <div className="col-md-12">
           <div className="row">
@@ -37,8 +46,9 @@ const EditContact = () => {
                     type="text"
                     placeholder="Full name"
                     value={ContactForm.name}
-                    onChange={e =>
-                      setContactForm({ ...ContactForm, name: e.target.value })}
+                    onChange={(e) =>
+                      setContactForm({ ...ContactForm, name: e.target.value })
+                    }
                   />
                 </div>
                 <div className="form-group mt-3">
@@ -47,8 +57,9 @@ const EditContact = () => {
                     type="email"
                     placeholder="Email"
                     value={ContactForm.email}
-                    onChange={e =>
-                      setContactForm({ ...ContactForm, email: e.target.value })}
+                    onChange={(e) =>
+                      setContactForm({ ...ContactForm, email: e.target.value })
+                    }
                   />
                 </div>
                 <div className="form-group mt-3">
@@ -57,11 +68,12 @@ const EditContact = () => {
                     type="number"
                     placeholder="Phone"
                     value={ContactForm.phonenumber}
-                    onChange={e =>
+                    onChange={(e) =>
                       setContactForm({
                         ...ContactForm,
-                        phonenumber: e.target.value
-                      })}
+                        phonenumber: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="form-group mt-3">
@@ -75,9 +87,9 @@ const EditContact = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div></>)}
     </div>
-     );
-}
- 
+  );
+};
+
 export default EditContact;

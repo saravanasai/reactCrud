@@ -9,46 +9,28 @@ export const fetch_contact =()=>async(dispatch) => {
       })
   }
 
+export const fetch_single_contact =(id)=>async(dispatch) => {
+    const response=await Api.get(`/singleContact/${id}`)
+    dispatch({
+      type: contactConstant.GET_SINGLE_CONTACT,
+      payload:response.data
+    })
+}
+
   export const add_contact =(value)=>async(dispatch) => {
-    await Api.post('/addcontac',value)
+    await Api.post('/addcontact',value)
     .then(()=>{
       dispatch({
         type: contactConstant.ADD_CONTACT,
         payload:value
       })
-    })
-    .catch((err)=>{
-      console.log(err);
-      dispatch({
-        type: contactConstant.GET_CONTACT_FAILD,
-      })
-    })
-    
-     
-      
-   
-    
-      
-     
+    })    
     
 }
 
-export const get_contact_fail = () => {
-  return {
-    type: contactConstant.GET_CONTACT_FAILD,
-  }
-}
-
-export const get_contact = value => {
-  return {
-    type: contactConstant.GET_CONTACT,
-    payload: value
-  }
-}
-
-export const selected_contact = value => {
-  return {
-    type: contactConstant.SELECTED_CONTACT,
-    payload: value
-  }
+export const remove_selected_contact=()=>{
+    
+  return{
+    type:contactConstant.REMOVE_SINGLE_CONTACT
+    }
 }

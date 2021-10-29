@@ -10,7 +10,6 @@ const AddContact = () => {
 
   const navigation=useHistory()
   const dispatch = useDispatch()
-  const add_status=useSelector(state=>state.contact.contacts.fetchStatus)
   const [ContactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -23,19 +22,9 @@ const AddContact = () => {
     e.preventDefault()
 
     dispatch(add_contact(ContactForm))
-     console.log(add_status);
-    if(add_status)
-    {
-      toast.error("SOMETHING WENT WRONG")
-      e.target.reset()
-      
-    }
-    else
-    {
       toast.success("CONACT ADDED SUCCESS FULLY")
         e.target.reset()
         navigation.push('/contact')
-    }
   }
 
 

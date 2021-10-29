@@ -2,28 +2,35 @@ import { contactConstant } from "./contactConstant"
 
 const initialState = {
   contacts: [],
-  fetchStatus:false
+  loading:false,
+  singleContact:'',
 }
 
 const ContactReducer = (state = initialState, action) => {
   
   switch (action.type) {
+    case contactConstant.GET_CONTACT:
+      return {
+        ...state,
+        contacts: action.payload,loading:true
+      }
+      case contactConstant.GET_SINGLE_CONTACT:
+      return {
+        ...state,
+        singleContact: action.payload,loading:true
+      }
+
     case contactConstant.ADD_CONTACT:
       return {
         ...state,
         contacts: [...state.contacts, action.payload]
       }
-      case contactConstant.GET_CONTACT:
+      case contactConstant.REMOVE_SINGLE_CONTACT:
       return {
-        ...state,
-        contacts: action.payload,fetchStatus:true
+        ...state,singleContact:''
       }
-      case contactConstant.GET_CONTACT_FAILD:
-      return {
-        ...state,
-        fetchStatus: true
-      }
-
+      
+      
     default:
       return state
   }
